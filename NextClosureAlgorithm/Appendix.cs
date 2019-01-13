@@ -66,7 +66,9 @@ namespace NextClosureAlgorithm
         public static FormalContext ParseFormalContext(string filePath)
         {
             IFCAFileReader reader = new LegacyFCAFileReader();
-            reader = new FCAFileReader();
+            //Drugi reader je dodat da bi mogao da parsira iz JSON fajlova o tek
+            //reader = new FCAFileReader();
+            //reader = new LegacyFCAFileReaderWithPreprocessing();
             //var attributes = reader.ReadAttributes(filePath);
             var context = reader.ReadContext(filePath);
             return context;
