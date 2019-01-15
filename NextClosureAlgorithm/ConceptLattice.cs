@@ -8,7 +8,7 @@ using System.IO;
 
 namespace NextClosureAlgorithm
 {
-    public class ConceptLattice
+    public class ConceptLattice 
     {
         private FormalContext context { get; set; }
         /// <summary>
