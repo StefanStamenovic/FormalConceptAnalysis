@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace NextClosureAlgorithm.Util
 {
@@ -12,7 +13,7 @@ namespace NextClosureAlgorithm.Util
     {
         public double Treshold { get; set; }
         private static readonly Random RandomGenerator = new Random();
-        public List<Document> PreprocessFile(string filePath)
+        public async Task<List<Document>> PreprocessFileAsync(string filePath)
         {
             List<Document> documents = new List<Document>();
             HashSet<string> allAttributes = new HashSet<string>();
@@ -27,7 +28,8 @@ namespace NextClosureAlgorithm.Util
                     //TODO: Ovo mora da se uradi jer je svaki atribut isti sa samim sobom, razmisliti o potencijalnoj optimizaciji ovog dela jer ipak mogu da se javi istri atributi u tagovima
                     if (excessAttributes.Contains(attr) || selectedAttr.Equals(attr))
                         continue;
-                    if(CheckIfAttributesAreEqual(attr,selectedAttr))
+                    bool result = await CheckIfAttributesAreEqualAsync(attr, selectedAttr);
+                    if (result)
                     {
                         //allAttributes.Remove(attr);
                         excessAttributes.Add(attr);
@@ -51,11 +53,20 @@ namespace NextClosureAlgorithm.Util
             }
         }
 
-        public bool CheckIfAttributesAreEqual(string attr1, string attr2)
+        public async Task<bool> CheckIfAttributesAreEqualAsync(string attr1, string attr2)
         {
             //TODO: Ovde je potrebno pozvati pravi servis koji leksicki uporedjuje dve recenice
             //TODO: Dodatno, od tagova koji se sastoje vise reci (odvojene _ ili - ) potrebno je napraviti recenice pa tako leksicki uporedjivati, odnosno cilj je da ova
             //metoda uvek uporedjuje dve recenice cak i kad se one sastoje samo do po jedne reci
+            //var firstSentence = attr1.Replace("-", " ");
+            //var secondSentence = attr2.Replace("-", " ");
+            //string myJson = "{ 'IRI1': '1', 'DESC1' : '"+firstSentence+"','IRI2': '2','DESC2' : '"+secondSentence+"' }";
+            //using (var client = new HttpClient())
+            //{
+            //    var response = await client.PostAsync(
+            //        "http://160.99.9.216/Description/api/description",
+            //         new StringContent(myJson, Encoding.UTF8, "application/json"));
+            //}
             var res = RandomGenerator.NextDouble();
             return res > Treshold;
         }

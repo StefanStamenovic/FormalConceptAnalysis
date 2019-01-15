@@ -14,6 +14,7 @@ namespace NextClosureAlgorithm.Util
         FormalContext ReadContext(string filePath);
         ICollection<Attribute> ReadAttributes(string filePath);
         ICollection<Item> ReadObjects(string filePath);
+        Task<FormalContext> ReadContextAsync(string filePath);
     }
 
     /// <summary>
@@ -70,6 +71,11 @@ namespace NextClosureAlgorithm.Util
             sr.Close();
             return new FormalContext(attributes, items, itemHasAttrs, attrHasItems);
         }
+
+        public Task<FormalContext> ReadContextAsync(string filePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class LegacyFCAFileReaderWithPreprocessing : IFCAFileReader
@@ -82,10 +88,10 @@ namespace NextClosureAlgorithm.Util
         {
             throw new NotImplementedException();
         }
-        public FormalContext ReadContext(string filePath)
+        public async Task<FormalContext> ReadContextAsync(string filePath)
         {
             FilePreprocessingManager preprocessingManager = new FilePreprocessingManager() { Treshold = 0.2};
-            preprocessingManager.PreprocessFile(filePath);
+            List<Document> docs = await preprocessingManager.PreprocessFileAsync(filePath);
             StreamReader sr = new StreamReader(filePath);
 
    
@@ -131,6 +137,11 @@ namespace NextClosureAlgorithm.Util
             }
             sr.Close();
             return new FormalContext(attributes, items, itemHasAttrs, attrHasItems);
+        }
+
+        public FormalContext ReadContext(string filePath)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -214,6 +225,11 @@ namespace NextClosureAlgorithm.Util
 
             var fcacontext = new FormalContext(attributes, objects, objectsHasAttributs, attributsHasObjects);
             return fcacontext;
+        }
+
+        public Task<FormalContext> ReadContextAsync(string filePath)
+        {
+            throw new NotImplementedException();
         }
 
         public ICollection<Item> ReadObjects(string filePath)
