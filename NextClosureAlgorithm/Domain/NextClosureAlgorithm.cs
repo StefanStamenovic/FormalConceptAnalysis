@@ -1,70 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NextClosureAlgorithm.Domain
 {
-    public class Attribute
-    {
-        public string Name { get; set; }
-
-        public Attribute(string name)
-        {
-            Name = name;
-        }
-    }
-
-    public class Object
-    {
-        public string Name { get; set; }
-
-        public Object(string name)
-        {
-            Name = name;
-        }
-    }
-
-    public class FormalConcept
-    {
-        private Object[] _objects { get; set; }
-        private Attribute[] _attributes { get; set; }
-
-        public FormalConcept(IEnumerable<Object> objects, IEnumerable<Attribute> attributes)
-        {
-            _objects = objects.ToArray();
-            _attributes = attributes.ToArray();
-        }
-    }
-
-    public class FormalContext
-    {
-        private Object[] _objects { get; set; }
-        public Object[] ObjectsArray => _objects;
-        public HashSet<Object> ObjectsSet => new HashSet<Object>(_objects);
-
-        private Attribute[] _attributes { get; set; }
-        public Attribute[] AttributesArray => _attributes;
-        public HashSet<Attribute> AttributesSet => new HashSet<Attribute>(_attributes);
-
-        public Dictionary<Object, HashSet<Attribute>> ObjectAttributes { get; set; }
-        public Dictionary<Attribute, HashSet<Object>> AttributeObjects { get; set; }
-
-        public FormalContext(
-            IEnumerable<Object> objects,
-            IEnumerable<Attribute> attributes,
-            Dictionary<Object, HashSet<Attribute>> objectAttributes,
-            Dictionary<Attribute, HashSet<Object>> attributeObjects)
-        {
-            _objects = objects.ToArray();
-            _attributes = attributes.ToArray();
-            ObjectAttributes = objectAttributes;
-            AttributeObjects = attributeObjects;
-        }
-    }
-    public interface IFormalConceptAlgorithm { }
-
     public class NextClosureAlgorithm : IFormalConceptAlgorithm
     {
         public FormalContext FormalContext { get; private set; }

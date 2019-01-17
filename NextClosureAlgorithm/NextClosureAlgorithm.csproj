@@ -68,7 +68,12 @@
     <Compile Include="Appendix.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="ConceptLattice.cs" />
-    <Compile Include="Domain\Domain.cs" />
+    <Compile Include="Domain\Attribute.cs" />
+    <Compile Include="Domain\FormalConcept.cs" />
+    <Compile Include="Domain\FormalContext.cs" />
+    <Compile Include="Domain\IFormalConceptAlgorithm.cs" />
+    <Compile Include="Domain\NextClosureAlgorithm.cs" />
+    <Compile Include="Domain\Object.cs" />
     <Compile Include="FormalConcept.cs" />
     <Compile Include="FormalContext.cs" />
     <Compile Include="Item.cs" />
