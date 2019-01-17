@@ -65,8 +65,8 @@ namespace NextClosureAlgorithm
         /// <returns></returns>
         private List<List<Attribute>> NextClosure(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            List<Item> items = context.items;
-            List<Attribute> attributes = context.attributes;
+            List<Item> items = context.Items;
+            List<Attribute> attributes = context.Attributes;
 
             //pocetni skup je intent svih objekata
             List<Attribute> setA = context.Intent(items).ToList();
@@ -244,13 +244,13 @@ namespace NextClosureAlgorithm
             if (writeContext)
             {
                 writer.WriteLine("Attributes: (lecticPosition, name)");
-                foreach (var attr in context.attributes)
+                foreach (var attr in context.Attributes)
                 {
                     writer.WriteLine("(" + attr.lecticPosition + ", " + attr.name + ")");
                 }
 
                 writer.WriteLine("Items: (matrixOrded, id, name)");
-                foreach (var item in context.items)
+                foreach (var item in context.Items)
                 {
                     writer.WriteLine("(" + item.matrixOrder + ", " + item.id + ", " + item.name + ")");
                 }

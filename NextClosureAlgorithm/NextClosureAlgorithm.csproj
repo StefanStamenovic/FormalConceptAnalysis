@@ -57,6 +57,7 @@
     <Compile Include="Appendix.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="ConceptLattice.cs" />
+    <Compile Include="Domain\Domain.cs" />
     <Compile Include="FormalConcept.cs" />
     <Compile Include="FormalContext.cs" />
     <Compile Include="Item.cs" />
