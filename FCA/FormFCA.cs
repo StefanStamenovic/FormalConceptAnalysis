@@ -70,7 +70,7 @@ namespace FCA
                 outputFolderTxt.Text = outputFolder;
             }
         }
-        private void formalConceptBtn_Click(object sender, EventArgs e)
+        private async void formalConceptBtn_Click(object sender, EventArgs e)
         {
             lblNextClosure.Text = "Parsing formal context from file...";
             if (this.inputFile == "")
@@ -78,7 +78,7 @@ namespace FCA
                 MessageBox.Show("Choose input file");
                 return;
             }
-            this.context = Appendix.ParseFormalContext(this.inputFile);
+            this.context = await Appendix.ParseFormalContextAsync(this.inputFile);
             this.outputFolder = outputFolderTxt.Text;
             this.outputFile = outputFileNameTxt.Text;
             this.outputFile = this.outputFolder + "\\" + this.outputFile + ".txt";
