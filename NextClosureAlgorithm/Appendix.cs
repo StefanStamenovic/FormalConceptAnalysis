@@ -67,10 +67,10 @@ namespace NextClosureAlgorithm
         {
             IFCAFileReader reader = new LegacyFCAFileReader();
             //Drugi reader je dodat da bi mogao da parsira iz JSON fajlova o tek
-            //reader = new FCAFileReader();
-            reader = new LegacyFCAFileReaderWithPreprocessing();
+            reader = new FCAFileReader();
+            //reader = new LegacyFCAFileReaderWithPreprocessing();
             //var attributes = reader.ReadAttributes(filePath);
-            var context = await reader.ReadContextAsync(filePath);
+            var context = reader.ReadContext(filePath);
             return context;
         }
     }

@@ -5,9 +5,13 @@ namespace NextClosureAlgorithm.Domain
 {
     public class FormalContext
     {
+        #region Objects
+
         private Object[] _objects { get; set; }
         public Object[] ObjectsArray => _objects;
         public HashSet<Object> ObjectsSet => new HashSet<Object>(_objects);
+
+        #endregion
 
         private Attribute[] _attributes { get; set; }
         public Attribute[] AttributesArray => _attributes;
