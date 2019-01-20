@@ -144,6 +144,7 @@ namespace NextClosureAlgorithm.Util
             var newFCAContext = new Domain.FormalContext(newObjects, newAttributes, newObjectsHasAttributs, newAttributsHasObjects);
             var algoritham = new Domain.NextClosureAlgorithm(newFCAContext);
             var formalConcepts = algoritham.FormalConcepts();
+            var lattice = new Domain.ConceptLattice(formalConcepts, newFCAContext);
 
             var fcacontext = new FormalContext(attributes, objects, objectsHasAttributs, attributsHasObjects);
             return fcacontext;

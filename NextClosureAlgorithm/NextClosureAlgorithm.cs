@@ -387,7 +387,7 @@ namespace NextClosureAlgorithm.Domain
             foreach (var intent in intents)
             {
                 var extent = IntetntExtents[intent];
-                var formalConcept = new FormalConcept(extent, intent);
+                var formalConcept = new FormalConcept(extent, intent, FormalContext);
                 formalConcepts.Add(formalConcept);
             }
             IntetntExtents.Clear();
@@ -401,7 +401,7 @@ namespace NextClosureAlgorithm.Domain
             foreach (var extent in extents)
             {
                 var intent = ExtentIntetnts[extent];
-                var formalConcept = new FormalConcept(extent, intent);
+                var formalConcept = new FormalConcept(extent, intent, FormalContext);
                 formalConcepts.Add(formalConcept);
             }
             ExtentIntetnts.Clear();
