@@ -78,7 +78,7 @@ namespace FCA
                 MessageBox.Show("Choose input file");
                 return;
             }
-            this.context = await Appendix.ParseFormalContextAsync(this.inputFile);
+            var context = await Appendix.ParseFormalContextAsync(this.inputFile);
             this.outputFolder = outputFolderTxt.Text;
             this.outputFile = outputFileNameTxt.Text;
             this.outputFile = this.outputFolder + "\\" + this.outputFile + ".txt";

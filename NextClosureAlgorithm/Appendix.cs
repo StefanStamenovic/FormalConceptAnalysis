@@ -63,15 +63,16 @@ namespace NextClosureAlgorithm
         /// </summary>
         /// <param name="filePath">putanja do tekstualnog fajla sa dokumentima (objekti) i njihovim tagovima(attributes)</param>
         /// <returns>formalni kontekst</returns>
-        public static async System.Threading.Tasks.Task<FormalContext> ParseFormalContextAsync(string filePath)
+        public static async System.Threading.Tasks.Task<Domain.FormalContext> ParseFormalContextAsync(string filePath)
         {
-            IFCAFileReader reader = new LegacyFCAFileReader();
+            //IFCAFileReader reader = new LegacyFCAFileReader();
             //Drugi reader je dodat da bi mogao da parsira iz JSON fajlova o tek
-            reader = new FCAFileReader();
-            //reader = new LegacyFCAFileReaderWithPreprocessing();
+            //reader = new FCAFileReader();
+
+            var reader = new LegacyFCAFileReaderWithPreprocessing();
             //var attributes = reader.ReadAttributes(filePath);
-            var context = reader.ReadContext(filePath);
-            return context;
+            var context = reader.ReadContextAsync(filePath);
+            return await context;
         }
     }
 }
