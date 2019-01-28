@@ -63,7 +63,7 @@ namespace NextClosureAlgorithm
         /// </summary>
         /// <param name="filePath">putanja do tekstualnog fajla sa dokumentima (objekti) i njihovim tagovima(attributes)</param>
         /// <returns>formalni kontekst</returns>
-        public static async System.Threading.Tasks.Task<FormalContext> ParseFormalContextAsync(string filePath)
+        public static async System.Threading.Tasks.Task<Domain.FormalContext> ParseFormalContextAsync(string filePath)
         {
             IFCAFileReader reader = new LegacyFCAFileReader();
             //Drugi reader je dodat da bi mogao da parsira iz JSON fajlova o tek
@@ -71,7 +71,46 @@ namespace NextClosureAlgorithm
             //reader = new LegacyFCAFileReaderWithPreprocessing();
             //var attributes = reader.ReadAttributes(filePath);
             var context = reader.ReadContext(filePath);
-            return context;
+            var objectDictionary = new Dictionary<string, Domain.Object>();
+            var newObjects = new HashSet<Domain.Object>();
+            foreach (var obj in context.Items)
+            {
+                var object_ = new Domain.Object(obj.name);
+                newObjects.Add(object_);
+                objectDictionary[object_.Name] = object_;
+            }
+            var attributeDictionary = new Dictionary<string, Domain.Attribute>();
+            var newAttributes = new HashSet<Domain.Attribute>();
+            foreach (var attribute in context.Attributes)
+            {
+                var attribute_ = new Domain.Attribute(attribute.name);
+                newAttributes.Add(attribute_);
+                attributeDictionary[attribute_.Name] = attribute_;
+            }
+            var newObjectsHasAttributs = new Dictionary<Domain.Object, HashSet<Domain.Attribute>>();
+            foreach (var oha in context.itemHasAttrs)
+            {
+                var oattributes = new HashSet<Domain.Attribute>();
+                foreach (var attributeName in oha.Value)
+                {
+                    oattributes.Add(attributeDictionary[attributeName]);
+                }
+                newObjectsHasAttributs[objectDictionary[oha.Key]] = oattributes;
+            }
+            var newAttributsHasObjects = new Dictionary<Domain.Attribute, HashSet<Domain.Object>>();
+            foreach (var aho in context.attrHasItems)
+            {
+                var aobjects = new HashSet<Domain.Object>();
+                foreach (var objectName in aho.Value)
+                {
+                    aobjects.Add(objectDictionary[objectName]);
+                }
+                newAttributsHasObjects[attributeDictionary[aho.Key]] = aobjects;
+            }
+
+            var newFCAContext = new Domain.FormalContext(newObjects, newAttributes, newObjectsHasAttributs, newAttributsHasObjects);
+            //var context = reader.ReadContextAsync(filePath);
+            return newFCAContext;
         }
     }
 }

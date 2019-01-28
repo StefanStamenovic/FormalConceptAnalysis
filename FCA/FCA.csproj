@@ -103,6 +103,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Neo4jFCA\Neo4jFCA.csproj">
+      <Project>{986C9EB6-D909-484B-BC00-47B435A17ADA}</Project>
+      <Name>Neo4jFCA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NextClosureAlgorithm\NextClosureAlgorithm.csproj">
       <Project>{cb305be4-1d27-428d-bbc2-ca8aae69e60a}</Project>
       <Name>NextClosureAlgorithm</Name>
