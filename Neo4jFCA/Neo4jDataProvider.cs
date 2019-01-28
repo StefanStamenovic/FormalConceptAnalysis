@@ -61,7 +61,7 @@ namespace Neo4jFCA
                 var objectsAggregate = "";
                 if (node.Objects.Any())
                    objectsAggregate = node.Objects.Select(o => o.Name).Aggregate((i, j) => i + "," + j);
-                dictionary.Add("objects", node.Objects.Select(o => o.Name).Aggregate((i, j) => i + "," + j));
+                dictionary.Add("objects", objectsAggregate);
 
                 CypherQuery query = new CypherQuery("CREATE (node: Node{ id: {id}, attributes: {attributes}, objects: {objects}})",
                            dictionary, CypherResultMode.Set);

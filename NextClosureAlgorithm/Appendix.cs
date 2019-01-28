@@ -71,7 +71,7 @@ namespace NextClosureAlgorithm
 
             var reader = new LegacyFCAFileReaderWithPreprocessing();
             //var attributes = reader.ReadAttributes(filePath);
-            var context = reader.ReadContext(filePath);
+/*        var context = reader.ReadContext(filePath);
             var objectDictionary = new Dictionary<string, Domain.Object>();
             var newObjects = new HashSet<Domain.Object>();
             foreach (var obj in context.Items)
@@ -111,7 +111,7 @@ namespace NextClosureAlgorithm
 
             var newFCAContext = new Domain.FormalContext(newObjects, newAttributes, newObjectsHasAttributs, newAttributsHasObjects);
             //var context = reader.ReadContextAsync(filePath);
-            return newFCAContext;
+            return newFCAContext;*/
             var context = reader.ReadContextAsync(filePath);
             return await context;
         }
