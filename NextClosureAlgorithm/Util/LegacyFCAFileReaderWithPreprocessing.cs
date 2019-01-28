@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NextClosureAlgorithm.Util
 {
-    public class LegacyFCAFileReaderWithPreprocessing : IFCAFileReader
+    public class LegacyFCAFileReaderWithPreprocessing
     {
         public ICollection<Attribute> ReadAttributes(string filePath)
         {
@@ -17,60 +17,41 @@ namespace NextClosureAlgorithm.Util
         {
             throw new NotImplementedException();
         }
-        public async Task<FormalContext> ReadContextAsync(string filePath)
+        public async Task<Domain.FormalContext> ReadContextAsync(string filePath)
         {
             FilePreprocessingManager preprocessingManager = new FilePreprocessingManager() { Treshold = 0.2};
-            List<Document> docs = await preprocessingManager.PreprocessFileAsync(filePath);
-            StreamReader sr = new StreamReader(filePath);
-
-   
-            string jsonString;
-            List<dynamic> documents = new List<dynamic>();
 
             HashSet<string> allAttributes = new HashSet<string>();
-           /* while ((jsonString = sr.ReadLine()) != null)
-            {
-                dynamic document = JsonConvert.DeserializeObject(jsonString);
-                documents.Add(document);
-            }*/
+            List<Domain.Object> objects = new List<Domain.Object>();
+            List<Domain.Attribute> attributes = new List<Domain.Attribute>();
+            Dictionary<Domain.Object, HashSet<Domain.Attribute>> objectAttributes = new Dictionary<Domain.Object, HashSet<Domain.Attribute>>();
+            Dictionary<Domain.Attribute, HashSet<Domain.Object>> attributeObjects = new Dictionary<Domain.Attribute, HashSet<Domain.Object>>();
 
-            List<Item> items = new List<Item>();
-            List<Attribute> attributes = new List<Attribute>();
-            Dictionary<string, HashSet<string>> itemHasAttrs = new Dictionary<string, HashSet<string>>();
-            Dictionary<string, HashSet<string>> attrHasItems = new Dictionary<string, HashSet<string>>();
+            List<Document> documents = await preprocessingManager.PreprocessFileAsync(filePath);
 
-            while ((jsonString = sr.ReadLine()) != null)
+            foreach (var document in documents)
             {
-                dynamic document = JsonConvert.DeserializeObject(jsonString);
                 if (document.tags.Count == 0) continue;
-                Item item = new Item() { id = document.id, name = document.name };
-                items.Add(item);
+                Domain.Object obj = new Domain.Object(document.name);
+                objects.Add(obj);
 
-                itemHasAttrs.Add(item.name, new HashSet<string>());
-                List<string> tagList = document.tags.ToObject<List<string>>();
-                allAttributes.UnionWith(tagList);
-                for (int i = 0; i < document.tags.Count; i++)
+                objectAttributes.Add(obj, new HashSet<Domain.Attribute>());
+                allAttributes.UnionWith(document.tags);
+                foreach (var tag in document.tags)
                 {
-                    string tag = document.tags[i].ToString();
-                    Attribute attr = new Attribute() { name = tag };
+                    Domain.Attribute attr = new Domain.Attribute(tag);
 
-                    if (!(attributes.Any(a => a.name == tag)))
+                    if (!(attributes.Any(a => a.Name == tag)))
                     {
                         attributes.Add(attr);
-                        attrHasItems.Add(attr.name, new HashSet<string>());
+                        attributeObjects.Add(attr, new HashSet<Domain.Object>());
                     }
 
-                    attrHasItems[attr.name].Add(item.name);
-                    itemHasAttrs[item.name].Add(attr.name);
+                    attributeObjects[attr].Add(obj);
+                    objectAttributes[obj].Add(attr);
                 }
             }
-            sr.Close();
-            return new FormalContext(attributes, items, itemHasAttrs, attrHasItems);
-        }
-
-        public FormalContext ReadContext(string filePath)
-        {
-            throw new NotImplementedException();
+            return new Domain.FormalContext(objects, attributes, objectAttributes, attributeObjects);
         }
     }
 }

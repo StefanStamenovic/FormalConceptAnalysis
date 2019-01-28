@@ -9,7 +9,7 @@ using System.Net.Http;
 
 namespace NextClosureAlgorithm.Util
 {
-    class FilePreprocessingManager
+    public class FilePreprocessingManager
     {
         public double Treshold { get; set; }
         private static readonly Random RandomGenerator = new Random();
@@ -23,6 +23,7 @@ namespace NextClosureAlgorithm.Util
             {
                 if (excessAttributes.Contains(selectedAttr))
                     continue;
+                //TODO: Ovde ubaciti izmenu kada se servis za slicnost izmeni da prima niz atributa
                 foreach (var attr in allAttributes)
                 {
                     //TODO: Ovo mora da se uradi jer je svaki atribut isti sa samim sobom, razmisliti o potencijalnoj optimizaciji ovog dela jer ipak mogu da se javi istri atributi u tagovima
@@ -31,7 +32,6 @@ namespace NextClosureAlgorithm.Util
                     bool result = await CheckIfAttributesAreEqualAsync(attr, selectedAttr);
                     if (result)
                     {
-                        //allAttributes.Remove(attr);
                         excessAttributes.Add(attr);
                         RefactorDocumentTags(documents, selectedAttr, attr);
                     }
@@ -40,7 +40,7 @@ namespace NextClosureAlgorithm.Util
             return documents;
         }
 
-        public void RefactorDocumentTags(List<Document> documents, string mainAttr, string replacingAttr)
+        void RefactorDocumentTags(List<Document> documents, string mainAttr, string replacingAttr)
         {
             for (int i = 0; i < documents.Count; i++)
             {
@@ -53,7 +53,7 @@ namespace NextClosureAlgorithm.Util
             }
         }
 
-        public async Task<bool> CheckIfAttributesAreEqualAsync(string attr1, string attr2)
+         async Task<bool> CheckIfAttributesAreEqualAsync(string attr1, string attr2)
         {
             //TODO: Ovde je potrebno pozvati pravi servis koji leksicki uporedjuje dve recenice
             //TODO: Dodatno, od tagova koji se sastoje vise reci (odvojene _ ili - ) potrebno je napraviti recenice pa tako leksicki uporedjivati, odnosno cilj je da ova
@@ -70,7 +70,7 @@ namespace NextClosureAlgorithm.Util
             var res = RandomGenerator.NextDouble();
             return res > Treshold;
         }
-        public (List<Document>, HashSet<string>) GetDocumentsAndAttributes(string filePath)
+        (List<Document>, HashSet<string>) GetDocumentsAndAttributes(string filePath)
         {
             StreamReader sr = new StreamReader(filePath);
 
@@ -95,7 +95,7 @@ namespace NextClosureAlgorithm.Util
         }
     }
 
-    class Document
+    public class Document
     {
 
         public string oid { get; set; }
