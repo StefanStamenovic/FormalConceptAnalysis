@@ -116,5 +116,13 @@ namespace NextClosureAlgorithm
 
             return lattice;
         }
+
+        public static Domain.ConceptLattice newperformAlgorithm(Domain.FormalContext context, BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            var algorithm = new Domain.NextClosureAlgorithm(context);
+            var formalConcepts = algorithm.FormalConcepts();
+            Domain.ConceptLattice lattice = new Domain.ConceptLattice(formalConcepts, context);
+            return lattice;
+        }
     }
 }

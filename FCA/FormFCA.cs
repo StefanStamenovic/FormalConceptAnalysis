@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using NextClosureAlgorithm;
 using System.Diagnostics;
+using Neo4jFCA;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace FCA
 {
@@ -19,6 +21,7 @@ namespace FCA
         /// formalni kontekst za koji se kreira latica
         /// </summary>
         FormalContext context;
+        NextClosureAlgorithm.Domain.FormalContext newContext;
         /// <summary>
         /// putanja do tekstualnog fajla iz kog se parsira formalni kontekst
         /// </summary>
@@ -78,7 +81,7 @@ namespace FCA
                 MessageBox.Show("Choose input file");
                 return;
             }
-            var context = await Appendix.ParseFormalContextAsync(this.inputFile);
+            //this.context = await Appendix.ParseFormalContextAsync(this.inputFile);
             this.outputFolder = outputFolderTxt.Text;
             this.outputFile = outputFileNameTxt.Text;
             this.outputFile = this.outputFolder + "\\" + this.outputFile + ".txt";
@@ -170,6 +173,15 @@ namespace FCA
                 backgroundWorker1.RunWorkerAsync();
             }
         }
+        void RunWorker2Async()
+        {
+            if (backgroundWorker2.IsBusy != true)
+            {
+                toggleBtns(false);
+                timer1.Start();
+                backgroundWorker2.RunWorkerAsync();
+            }
+        }
         void clearTextBoxes() {
             inputFileTxt.Text = "";
             outputFolderTxt.Text = "";
@@ -181,6 +193,66 @@ namespace FCA
             testBiosphereBtn.Enabled = enable;
             testBasicBtn.Enabled = enable;
             cancelAsyncBtn.Enabled = !enable;
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            lblNextClosure.Text = "Parsing formal context from file...";
+            if (this.inputFile == "")
+            {
+                MessageBox.Show("Choose input file");
+                return;
+            }
+            this.newContext = await Appendix.ParseFormalContextAsync(this.inputFile);
+            this.outputFolder = outputFolderTxt.Text;
+            this.outputFile = outputFileNameTxt.Text;
+            this.outputFile = this.outputFolder + "\\" + this.outputFile + ".txt";
+            if (this.outputFolder == "" || this.outputFile == "")
+            {
+                MessageBox.Show("Choose output folder and file name");
+                return;
+            }
+            this.writeFormalContext = writeFCChBox.Checked;
+            RunWorker2Async();
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            if (worker.CancellationPending == true)
+            {
+                e.Cancel = true;
+                return;
+            }
+            nextClosureStop.Restart();
+            e.Result = Test.newperformAlgorithm(this.newContext, worker, e);
+            var provider = new Neo4jDataProvider();
+            provider.ClearDatabase();
+            provider.ImportFCALattice((NextClosureAlgorithm.Domain.ConceptLattice)e.Result);
+
+            if (e.Result == null)
+                return;
+            nextClosureStop.Stop();
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == true)
+            {
+                MessageBox.Show("Formal concepts computation has been canceled.", "Canceled");
+
+            }
+            else if (e.Error != null)
+            {
+                MessageBox.Show("Error: " + e.Error.Message);
+            }
+            else
+            {
+                MessageBox.Show("Formal Concepts computation completed");
+            }
+            timer1.Stop();
+            toggleBtns(true);
+            clearTextBoxes();
         }
     }
 }

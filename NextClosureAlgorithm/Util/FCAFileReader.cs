@@ -23,7 +23,7 @@ namespace NextClosureAlgorithm.Util
             var attribute_tags = new HashSet<string>();
             var json = ReadJsonData(filePath);
             dynamic documents = JsonConvert.DeserializeObject(json);
-            foreach(var document in documents)
+            foreach (var document in documents)
             {
                 foreach (string tag in document.tags)
                 {
@@ -104,47 +104,47 @@ namespace NextClosureAlgorithm.Util
             //    if (A.IsSubsetOf(attributeObjectsSet))
             //        intent.Add(attribute);
             //}
-            var objectDictionary = new Dictionary<string, Domain.Object>();
-            var newObjects = new HashSet<Domain.Object>();
-            foreach (var obj in objects)
-            {
-                var object_ = new Domain.Object(obj.name);
-                newObjects.Add(object_);
-                objectDictionary[object_.Name] = object_;
-            }
-            var attributeDictionary = new Dictionary<string, Domain.Attribute>();
-            var newAttributes = new HashSet<Domain.Attribute>();
-            foreach (var attribute in attributes)
-            {
-                var attribute_ = new Domain.Attribute(attribute.name);
-                newAttributes.Add(attribute_);
-                attributeDictionary[attribute_.Name] = attribute_;
-            }
-            var newObjectsHasAttributs = new Dictionary<Domain.Object, HashSet<Domain.Attribute>>();
-            foreach (var oha in objectsHasAttributs)
-            {
-                var oattributes = new HashSet<Domain.Attribute>();
-                foreach(var attributeName in oha.Value)
-                {
-                    oattributes.Add(attributeDictionary[attributeName]);
-                }
-                newObjectsHasAttributs[objectDictionary[oha.Key]] = oattributes;
-            }
-            var newAttributsHasObjects = new Dictionary<Domain.Attribute, HashSet<Domain.Object>>();
-            foreach (var aho in attributsHasObjects)
-            {
-                var aobjects = new HashSet<Domain.Object>();
-                foreach (var objectName in aho.Value)
-                {
-                    aobjects.Add(objectDictionary[objectName]);
-                }
-                newAttributsHasObjects[attributeDictionary[aho.Key]] = aobjects;
-            }
+            //var objectDictionary = new Dictionary<string, Domain.Object>();
+            //var newObjects = new HashSet<Domain.Object>();
+            //foreach (var obj in objects)
+            //{
+            //    var object_ = new Domain.Object(obj.name);
+            //    newObjects.Add(object_);
+            //    objectDictionary[object_.Name] = object_;
+            //}
+            //var attributeDictionary = new Dictionary<string, Domain.Attribute>();
+            //var newAttributes = new HashSet<Domain.Attribute>();
+            //foreach (var attribute in attributes)
+            //{
+            //    var attribute_ = new Domain.Attribute(attribute.name);
+            //    newAttributes.Add(attribute_);
+            //    attributeDictionary[attribute_.Name] = attribute_;
+            //}
+            //var newObjectsHasAttributs = new Dictionary<Domain.Object, HashSet<Domain.Attribute>>();
+            //foreach (var oha in objectsHasAttributs)
+            //{
+            //    var oattributes = new HashSet<Domain.Attribute>();
+            //    foreach (var attributeName in oha.Value)
+            //    {
+            //        oattributes.Add(attributeDictionary[attributeName]);
+            //    }
+            //    newObjectsHasAttributs[objectDictionary[oha.Key]] = oattributes;
+            //}
+            //var newAttributsHasObjects = new Dictionary<Domain.Attribute, HashSet<Domain.Object>>();
+            //foreach (var aho in attributsHasObjects)
+            //{
+            //    var aobjects = new HashSet<Domain.Object>();
+            //    foreach (var objectName in aho.Value)
+            //    {
+            //        aobjects.Add(objectDictionary[objectName]);
+            //    }
+            //    newAttributsHasObjects[attributeDictionary[aho.Key]] = aobjects;
+            //}
 
-            var newFCAContext = new Domain.FormalContext(newObjects, newAttributes, newObjectsHasAttributs, newAttributsHasObjects);
-            var algoritham = new Domain.NextClosureAlgorithm(newFCAContext);
-            var formalConcepts = algoritham.FormalConcepts();
-            var lattice = new Domain.ConceptLattice(formalConcepts, newFCAContext);
+            //var newFCAContext = new Domain.FormalContext(newObjects, newAttributes, newObjectsHasAttributs, newAttributsHasObjects);
+            //var algoritham = new Domain.NextClosureAlgorithm(newFCAContext);
+            //var formalConcepts = algoritham.FormalConcepts();
+            //var lattice = new Domain.ConceptLattice(formalConcepts, newFCAContext);
 
             var fcacontext = new FormalContext(attributes, objects, objectsHasAttributs, attributsHasObjects);
             return fcacontext;
