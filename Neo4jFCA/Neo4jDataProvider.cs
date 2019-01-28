@@ -42,9 +42,13 @@ namespace Neo4jFCA
 
         public void ClearDatabase()
         {
-            CypherQuery query = new CypherQuery("MATCH (n) DELETE n", null, CypherResultMode.Set);
+            CypherQuery query = new CypherQuery("MATCH ()-[r]-() DELETE r", null, CypherResultMode.Set);
 
             ((IRawGraphClient)client).ExecuteCypher(query);
+
+            CypherQuery query2 = new CypherQuery("MATCH (n) DELETE n", null, CypherResultMode.Set);
+
+            ((IRawGraphClient)client).ExecuteCypher(query2);
         }
 
         public void ImportFCALattice(ConceptLattice lattice)
@@ -53,7 +57,7 @@ namespace Neo4jFCA
             foreach(var node in latticeNodes)
             {
                 Dictionary<string, object> dictionary = new Dictionary<string, object>();
-                dictionary.Add("id", Guid.NewGuid());
+                dictionary.Add("id", node.Id);
                 var attributesAggregate = "";
                 if(node.Attributes.Any())
                     node.Attributes.Select(a => a.Name).Aggregate((i, j) => i + "," + j);
@@ -67,6 +71,19 @@ namespace Neo4jFCA
                            dictionary, CypherResultMode.Set);
 
                 ((IRawGraphClient)client).ExecuteCypher(query);
+            }
+
+            foreach(var node in latticeNodes)
+            {
+                foreach(var subnode in node.Subconcepts)
+                {
+                    var dictionary = new Dictionary<string, object>();
+                    dictionary.Add("node_id", node.Id);
+                    dictionary.Add("subnode_id", subnode.Id);
+                    var query = new CypherQuery("MATCH (node:Node{id: {node_id}}),(subnode:Node{id: {subnode_id}}) CREATE (node)-[relation:rel]->(subnode)",
+                               dictionary, CypherResultMode.Set);
+                    ((IRawGraphClient)client).ExecuteCypher(query);
+                }
             }
         }
     }

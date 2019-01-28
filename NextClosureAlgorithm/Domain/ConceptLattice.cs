@@ -29,6 +29,7 @@ namespace NextClosureAlgorithm.Domain
             for (int i = 0; i < FormalConcepts.Count(); i++)
             {
                 var latticeFormalConcept = new LatticeFormalConcept(FormalConcepts.ElementAt(i));
+                latticeFormalConcept.Id = Guid.NewGuid().ToString();
                 latticeFormalConcepts[i] = latticeFormalConcept;
             }
 
@@ -61,6 +62,8 @@ namespace NextClosureAlgorithm.Domain
 
     public class LatticeFormalConcept
     {
+        public string Id { get; set; }
+
         public FormalConcept FormalConcept { get; private set; }
 
         public int AttributeCount => Attributes.Count();
