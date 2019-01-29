@@ -39,11 +39,14 @@ namespace FCA
         /// </summary>
         private readonly Stopwatch nextClosureStop = new Stopwatch();
         public bool writeFormalContext { get; set; }
+        private Neo4jDataProvider provider;
+        
         public FormFCA()
         {
             InitializeComponent();
             backgroundWorker1.WorkerSupportsCancellation = true;
             cancelAsyncBtn.Enabled = false;
+            provider = new Neo4jDataProvider();
         }
 
         private void selectInputBtn_Click(object sender, EventArgs e)
@@ -226,7 +229,6 @@ namespace FCA
             }
             nextClosureStop.Restart();
             e.Result = Test.newperformAlgorithm(this.newContext, worker, e);
-            var provider = new Neo4jDataProvider();
             provider.ClearDatabase();
             provider.ImportFCALattice((NextClosureAlgorithm.Domain.ConceptLattice)e.Result);
 
@@ -253,6 +255,13 @@ namespace FCA
             timer1.Stop();
             toggleBtns(true);
             clearTextBoxes();
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            var res = provider.SearchForObjects(textBoxQuery.Text);
+            richTextBoxResult.Text = res.Replace(",", "\n\n");
+
         }
     }
 }
