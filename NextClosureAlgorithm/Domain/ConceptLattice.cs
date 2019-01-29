@@ -29,7 +29,7 @@ namespace NextClosureAlgorithm.Domain
             for (int i = 0; i < FormalConcepts.Count(); i++)
             {
                 var latticeFormalConcept = new LatticeFormalConcept(FormalConcepts.ElementAt(i));
-                latticeFormalConcept.Id = Guid.NewGuid().ToString();
+                latticeFormalConcept.Id = latticeFormalConcept.GetHashCode().ToString();
                 latticeFormalConcepts[i] = latticeFormalConcept;
             }
 
@@ -46,13 +46,18 @@ namespace NextClosureAlgorithm.Domain
                         var plfcSc = pLFC.Superconcepts.Where(c => c.AttributeCount > currentLFC.AttributeCount).ToList();
                         foreach (var superLFC in plfcSc)
                         {
-                            superLFC.Subconcepts.Remove(pLFC);
-                            pLFC.Superconcepts.Remove(superLFC);
+                            var suplfcas = new HashSet<Attribute>(superLFC.Attributes);
+                            if (clfcas.IsSubsetOf(suplfcas))
+                            {
+                                superLFC.Subconcepts.Remove(pLFC);
+                                pLFC.Superconcepts.Remove(superLFC);
+                            }
                         }
                         currentLFC.Subconcepts.Add(pLFC);
                         pLFC.Superconcepts.Add(currentLFC);
                     }
                 }
+
             }
             LatticeCommonSuperconcept = sortedLFCs.First();
             LatticeCommonSubconcept = sortedLFCs.Last();

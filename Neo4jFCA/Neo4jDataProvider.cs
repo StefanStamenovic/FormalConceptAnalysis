@@ -60,14 +60,15 @@ namespace Neo4jFCA
                 dictionary.Add("id", node.Id);
                 var attributesAggregate = "";
                 if(node.Attributes.Any())
-                    node.Attributes.Select(a => a.Name).Aggregate((i, j) => i + "," + j);
+                    attributesAggregate = node.Attributes.Select(a => a.Name).Aggregate((i, j) => i + "," + j);
                 dictionary.Add("attributes", attributesAggregate);
                 var objectsAggregate = "";
                 if (node.Objects.Any())
                    objectsAggregate = node.Objects.Select(o => o.Name).Aggregate((i, j) => i + "," + j);
                 dictionary.Add("objects", objectsAggregate);
+                dictionary.Add("attrCount", node.AttributeCount);
 
-                CypherQuery query = new CypherQuery("CREATE (node: Node{ id: {id}, attributes: {attributes}, objects: {objects}})",
+                CypherQuery query = new CypherQuery("CREATE (node: Node{ id: {id}, attributes: {attributes}, objects: {objects}, attrCount: {attrCount}})",
                            dictionary, CypherResultMode.Set);
 
                 ((IRawGraphClient)client).ExecuteCypher(query);
@@ -80,10 +81,19 @@ namespace Neo4jFCA
                     var dictionary = new Dictionary<string, object>();
                     dictionary.Add("node_id", node.Id);
                     dictionary.Add("subnode_id", subnode.Id);
-                    var query = new CypherQuery("MATCH (node:Node{id: {node_id}}),(subnode:Node{id: {subnode_id}}) CREATE (node)-[relation:rel]->(subnode)",
+                    var query = new CypherQuery("MATCH (node:Node{id: {node_id}}),(subnode:Node{id: {subnode_id}}) CREATE (node)-[relation:intent]->(subnode)",
                                dictionary, CypherResultMode.Set);
                     ((IRawGraphClient)client).ExecuteCypher(query);
                 }
+                //foreach (var supernode in node.Superconcepts)
+                //{
+                //    var dictionary = new Dictionary<string, object>();
+                //    dictionary.Add("node_id", node.Id);
+                //    dictionary.Add("supernode_id", supernode.Id);
+                //    var query = new CypherQuery("MATCH (node:Node{id: {node_id}}),(supernode:Node{id: {supernode_id}}) CREATE (node)-[relation:extent]->(supernode)",
+                //               dictionary, CypherResultMode.Set);
+                //    ((IRawGraphClient)client).ExecuteCypher(query);
+                //}
             }
         }
     }
