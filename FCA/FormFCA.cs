@@ -260,7 +260,14 @@ namespace FCA
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             var res = provider.SearchForObjects(textBoxQuery.Text);
-            richTextBoxResult.Text = res.Replace(",", "\n\n");
+            if(res==null)
+            {
+                richTextBoxResult.Text = "No results!";
+            }
+            else
+            {
+                richTextBoxResult.Text = res.Replace(",", "\n\n");
+            }
 
         }
     }
