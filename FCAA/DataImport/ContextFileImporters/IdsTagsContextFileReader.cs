@@ -15,7 +15,7 @@ namespace FCAA.Data
     /// <seealso cref="NextClosureAlgorithm.Util.IFCAFileReader" />
     public class IdsTagsContextFileReader : IContextFileImporter
     {
-        public string Description { get; } = "Json file reader with format [{id: #string, tags : [#string, ...], ...][...]";
+        public string Description { get; } = "Json file reader [{id: #string, tags : [#string, ...], ...][...]";
 
         public FormalContext ImportContext(string filePath)
         {

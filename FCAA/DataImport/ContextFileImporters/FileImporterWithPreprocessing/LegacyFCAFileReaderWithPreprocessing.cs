@@ -7,14 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Object = FCAA.Data.Object;
 using PreprocessingAttribute = FCAA.Data.PreprocessingAttribute;
-using FCAA.FilePreprocessing;
 using Attribute = FCAA.Data.Attribute;
 
-namespace FCAA.DataImport
+namespace FCAA.DataImport.ContextFileImporters
 {
     public class FCAFileReaderWithPreprocessing : IContextFileImporter
     {
-        public string Description => throw new NotImplementedException();
+        public string Description => "Json file reader(PREPROCESSED) [{name: #string, tags : [#string, ...], ...][...]";
 
         public ICollection<Attribute> ImportContextAttributes(string filePath)
         {

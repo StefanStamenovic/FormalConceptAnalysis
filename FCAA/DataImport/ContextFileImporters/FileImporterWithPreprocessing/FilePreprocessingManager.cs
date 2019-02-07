@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 
-namespace FCAA.FilePreprocessing
+namespace FCAA.DataImport.ContextFileImporters
 {
     public class FilePreprocessingManager
     {

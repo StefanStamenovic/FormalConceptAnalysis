@@ -51,20 +51,19 @@
     <Compile Include="DataImport\ContextFileImporters\DefaultContextFileImporter.cs" />
     <Compile Include="DataImport\ContextFileImporters\IContextFileImporter.cs" />
     <Compile Include="DataImport\ContextFileImporters\IdsTagsContextFileReader.cs" />
-    <Compile Include="DataImport\ReaderPreprocessing\LegacyFCAFileReaderWithPreprocessing.cs" />
-    <Compile Include="DataImport\ReaderPreprocessing\PreprocessingAttribute.cs" />
+    <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\LegacyFCAFileReaderWithPreprocessing.cs" />
+    <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\PreprocessingAttribute.cs" />
     <Compile Include="Data\Attribute.cs" />
     <Compile Include="Data\Lattice\ConceptLattice.cs" />
     <Compile Include="Data\FormalConcept.cs" />
     <Compile Include="Data\Lattice\LatticeFormalConcept.cs" />
     <Compile Include="Data\FormalContext\FormalContext.cs" />
     <Compile Include="Data\Object.cs" />
-    <Compile Include="DataImport\ReaderPreprocessing\DocumentAttribute.cs" />
-    <Compile Include="DataImport\ReaderPreprocessing\FilePreprocessingManager.cs" />
+    <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\DocumentAttribute.cs" />
+    <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\FilePreprocessingManager.cs" />
     <Compile Include="FormalConceptAlgorithms\FormalConceptAlgorithmFactory.cs" />
     <Compile Include="FormalConceptAlgorithms\IFormalConceptAlgorithm.cs" />
     <Compile Include="FormalConceptAlgorithms\NextClosureAlgorithm.cs" />
-    <Compile Include="IDataUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

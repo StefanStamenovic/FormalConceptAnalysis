@@ -18,6 +18,8 @@ namespace FCAA.DataImport.ContextFileImporters
                     return new DefaultContextFileImporter();
                 case ContextFileImporters.Json_id_tags_Importer:
                     return new IdsTagsContextFileReader();
+                case ContextFileImporters.Json_name_tags_with_preprocessing_Importer:
+                    return new FCAFileReaderWithPreprocessing();
                 default:
                     throw new Exception("File importer not supported.");
             }
@@ -28,5 +30,6 @@ namespace FCAA.DataImport.ContextFileImporters
     {
         DefaultImporter,
         Json_id_tags_Importer,
+        Json_name_tags_with_preprocessing_Importer
     }
 }

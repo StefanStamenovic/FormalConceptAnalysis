@@ -13,7 +13,7 @@ namespace FCAA.DataImport.ContextFileImporters
 {
     public class DefaultContextFileImporter : IContextFileImporter
     {
-        public string Description => "Default Json file reader with format [{object: #string, attributes : [#string, ...], ...][...]";
+        public string Description => "Default Json file reader [{object: #string, attributes : [#string, ...], ...][...]";
 
         public FormalContext ImportContext(string filePath)
         {
