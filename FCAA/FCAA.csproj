@@ -53,6 +53,7 @@
     <Compile Include="DataImport\ContextFileImporters\IdsTagsContextFileReader.cs" />
     <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\LegacyFCAFileReaderWithPreprocessing.cs" />
     <Compile Include="DataImport\ContextFileImporters\FileImporterWithPreprocessing\PreprocessingAttribute.cs" />
+    <Compile Include="DataImport\Preprocess\NLPFormalContextAttributesReduction.cs" />
     <Compile Include="Data\Attribute.cs" />
     <Compile Include="Data\Lattice\ConceptLattice.cs" />
     <Compile Include="Data\FormalConcept.cs" />
@@ -69,8 +70,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataImport\Preprocess\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -76,6 +76,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.computeLatticeBtn = new System.Windows.Forms.Button();
             this.exportLatticeNeo4jGBox = new System.Windows.Forms.GroupBox();
+            this.searchNeo4JLatticeBtn = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -89,7 +90,10 @@
             this.exportLatticeFileName = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.exportLatticeFileGBox = new System.Windows.Forms.GroupBox();
-            this.searchNeo4JLatticeBtn = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.importFileContextGBox.SuspendLayout();
             this.conceptsAlgorithmGBox.SuspendLayout();
             this.formalContextGBox.SuspendLayout();
@@ -149,6 +153,10 @@
             // importFileContextGBox
             // 
             this.importFileContextGBox.AccessibleName = "";
+            this.importFileContextGBox.Controls.Add(this.label19);
+            this.importFileContextGBox.Controls.Add(this.label18);
+            this.importFileContextGBox.Controls.Add(this.textBox2);
+            this.importFileContextGBox.Controls.Add(this.textBox1);
             this.importFileContextGBox.Controls.Add(this.label8);
             this.importFileContextGBox.Controls.Add(this.importFileFormatCbox);
             this.importFileContextGBox.Controls.Add(this.preprocessimportFileAttributesCBox);
@@ -160,7 +168,7 @@
             this.importFileContextGBox.Margin = new System.Windows.Forms.Padding(4);
             this.importFileContextGBox.Name = "importFileContextGBox";
             this.importFileContextGBox.Padding = new System.Windows.Forms.Padding(4);
-            this.importFileContextGBox.Size = new System.Drawing.Size(527, 164);
+            this.importFileContextGBox.Size = new System.Drawing.Size(527, 243);
             this.importFileContextGBox.TabIndex = 4;
             this.importFileContextGBox.TabStop = false;
             this.importFileContextGBox.Text = "Import context from file";
@@ -195,7 +203,7 @@
             // 
             // importContextBtn
             // 
-            this.importContextBtn.Location = new System.Drawing.Point(355, 125);
+            this.importContextBtn.Location = new System.Drawing.Point(355, 197);
             this.importContextBtn.Name = "importContextBtn";
             this.importContextBtn.Size = new System.Drawing.Size(165, 32);
             this.importContextBtn.TabIndex = 13;
@@ -360,7 +368,7 @@
             this.formalContextGBox.Controls.Add(this.label9);
             this.formalContextGBox.Controls.Add(this.label5);
             this.formalContextGBox.Controls.Add(this.label4);
-            this.formalContextGBox.Location = new System.Drawing.Point(16, 186);
+            this.formalContextGBox.Location = new System.Drawing.Point(16, 265);
             this.formalContextGBox.Name = "formalContextGBox";
             this.formalContextGBox.Size = new System.Drawing.Size(527, 98);
             this.formalContextGBox.TabIndex = 12;
@@ -459,7 +467,7 @@
             this.exportContextFileGBox.Controls.Add(this.label3);
             this.exportContextFileGBox.Controls.Add(this.outputFileNameTxt);
             this.exportContextFileGBox.Controls.Add(this.selectOutputBtn);
-            this.exportContextFileGBox.Location = new System.Drawing.Point(16, 290);
+            this.exportContextFileGBox.Location = new System.Drawing.Point(16, 369);
             this.exportContextFileGBox.Name = "exportContextFileGBox";
             this.exportContextFileGBox.Size = new System.Drawing.Size(527, 102);
             this.exportContextFileGBox.TabIndex = 11;
@@ -562,6 +570,16 @@
             this.exportLatticeNeo4jGBox.TabIndex = 15;
             this.exportLatticeNeo4jGBox.TabStop = false;
             this.exportLatticeNeo4jGBox.Text = "Export lattice";
+            // 
+            // searchNeo4JLatticeBtn
+            // 
+            this.searchNeo4JLatticeBtn.Location = new System.Drawing.Point(359, 72);
+            this.searchNeo4JLatticeBtn.Name = "searchNeo4JLatticeBtn";
+            this.searchNeo4JLatticeBtn.Size = new System.Drawing.Size(169, 23);
+            this.searchNeo4JLatticeBtn.TabIndex = 17;
+            this.searchNeo4JLatticeBtn.Text = "SearchNeo4JLattice";
+            this.searchNeo4JLatticeBtn.UseVisualStyleBackColor = true;
+            this.searchNeo4JLatticeBtn.Click += new System.EventHandler(this.searchNeo4JLatticeBtn_Click);
             // 
             // label17
             // 
@@ -692,15 +710,37 @@
             this.exportLatticeFileGBox.TabStop = false;
             this.exportLatticeFileGBox.Text = "Export lattice file";
             // 
-            // searchNeo4JLatticeBtn
+            // textBox1
             // 
-            this.searchNeo4JLatticeBtn.Location = new System.Drawing.Point(359, 72);
-            this.searchNeo4JLatticeBtn.Name = "searchNeo4JLatticeBtn";
-            this.searchNeo4JLatticeBtn.Size = new System.Drawing.Size(169, 23);
-            this.searchNeo4JLatticeBtn.TabIndex = 17;
-            this.searchNeo4JLatticeBtn.Text = "SearchNeo4JLattice";
-            this.searchNeo4JLatticeBtn.UseVisualStyleBackColor = true;
-            this.searchNeo4JLatticeBtn.Click += new System.EventHandler(this.searchNeo4JLatticeBtn_Click);
+            this.textBox1.Location = new System.Drawing.Point(12, 169);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(339, 22);
+            this.textBox1.TabIndex = 17;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(355, 169);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(162, 22);
+            this.textBox2.TabIndex = 18;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(9, 149);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(84, 17);
+            this.label18.TabIndex = 19;
+            this.label18.Text = "NLP service";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(354, 147);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(64, 17);
+            this.label19.TabIndex = 20;
+            this.label19.Text = "Treshold";
             // 
             // FormFCA
             // 
@@ -798,6 +838,10 @@
         private System.Windows.Forms.TextBox neo4jUsername;
         private System.Windows.Forms.GroupBox exportLatticeFileGBox;
         private System.Windows.Forms.Button searchNeo4JLatticeBtn;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
