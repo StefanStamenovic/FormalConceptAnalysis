@@ -12,6 +12,8 @@ using NextClosureAlgorithm;
 using System.Diagnostics;
 using Neo4jFCA;
 using System.DirectoryServices.ActiveDirectory;
+using SPARQLNET;
+using SPARQLNET.Objects;
 
 namespace FCA
 {
@@ -269,6 +271,15 @@ namespace FCA
                 richTextBoxResult.Text = res.Replace(",", "\n\n");
             }
 
+        }
+
+        private void sparqlbutton_Click(object sender, EventArgs e)
+        {
+            //Set the endpoint
+            QueryClient queryClient = new QueryClient("http://dbpedia.org/sparql");
+
+            var query = "SELECT * WHERE {<http://dbpedia.org/resource/Stealing_Beauty> <http://purl.org/dc/terms/subject> ?categories}";
+            Table table = queryClient.Query(query);
         }
     }
 }

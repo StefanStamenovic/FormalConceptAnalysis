@@ -58,6 +58,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.richTextBoxResult = new System.Windows.Forms.RichTextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.sparqlbutton = new System.Windows.Forms.Button();
             this.groupBoxIO.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -317,11 +318,22 @@
             this.label4.TabIndex = 10;
             this.label4.Text = "*Da bi se radila pretraga dovoljna je aktivna Neo4J baza s izgenerisanom laticom";
             // 
+            // sparqlbutton
+            // 
+            this.sparqlbutton.Location = new System.Drawing.Point(656, 139);
+            this.sparqlbutton.Name = "sparqlbutton";
+            this.sparqlbutton.Size = new System.Drawing.Size(120, 24);
+            this.sparqlbutton.TabIndex = 11;
+            this.sparqlbutton.Text = "SPARQL";
+            this.sparqlbutton.UseVisualStyleBackColor = true;
+            this.sparqlbutton.Click += new System.EventHandler(this.sparqlbutton_Click);
+            // 
             // FormFCA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 466);
+            this.Controls.Add(this.sparqlbutton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.cancelAsyncBtn);
@@ -375,6 +387,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RichTextBox richTextBoxResult;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button sparqlbutton;
     }
 }
 
