@@ -16,6 +16,8 @@ using FCAA.FormalConceptAlgorithms;
 using FCAA.Data;
 using FCAA.DataImport;
 using FCAA.DataImport.ContextFileImporters;
+using SPARQLNET;
+using SPARQLNET.Objects;
 
 namespace FCA
 {
@@ -492,6 +494,28 @@ namespace FCA
             this.exportLatticeFolderPath.Text = String.Empty;
             this.exportLatticeFileName.Text = String.Empty;
         }
-        #endregion
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            var res = provider.SearchForObjects(textBoxQuery.Text);
+            if(res==null)
+            {
+                richTextBoxResult.Text = "No results!";
+            }
+            else
+            {
+                richTextBoxResult.Text = res.Replace(",", "\n\n");
+            }
+
+        }
+
+        private void sparqlbutton_Click(object sender, EventArgs e)
+        {
+            //Set the endpoint
+            QueryClient queryClient = new QueryClient("http://dbpedia.org/sparql");
+
+            var query = "SELECT * WHERE {<http://dbpedia.org/resource/Stealing_Beauty> <http://purl.org/dc/terms/subject> ?categories}";
+            Table table = queryClient.Query(query);
+        }
     }
 }

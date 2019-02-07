@@ -166,5 +166,27 @@ namespace Neo4jFCA
                 attributesAggregate = node.Attributes.Select(a => a.Name).Aggregate((i, j) => i + " " + j);
             return attributesAggregate;
         }
+        public string SearchForObjects(string attribute)
+        {
+            var res = client.Cypher
+                 .Match("(n:Node)")
+                 .Where("n.attributes CONTAINS " + "'" + attribute + "'")
+                 .Return(n => n.As<Neo4JNode>().objects)
+                 .OrderBy("n.attrCount")
+                 .Limit(1)
+                 .Results;
+            return res.FirstOrDefault();
+        }
+
+        //pomocna klasa za deserijalizaciju rezultata iz upita za pretragu
+        private class Neo4JNode
+        {
+            public string id { get; set; }
+            public int attrCount { get; set; }
+            public string attributes { get; set; }
+            public string objects { get; set; }
+        }
     }
+
+
 }
