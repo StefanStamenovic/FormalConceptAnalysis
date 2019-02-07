@@ -89,6 +89,7 @@
             this.exportLatticeFileName = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.exportLatticeFileGBox = new System.Windows.Forms.GroupBox();
+            this.searchNeo4JLatticeBtn = new System.Windows.Forms.Button();
             this.importFileContextGBox.SuspendLayout();
             this.conceptsAlgorithmGBox.SuspendLayout();
             this.formalContextGBox.SuspendLayout();
@@ -547,6 +548,7 @@
             // 
             // exportLatticeNeo4jGBox
             // 
+            this.exportLatticeNeo4jGBox.Controls.Add(this.searchNeo4JLatticeBtn);
             this.exportLatticeNeo4jGBox.Controls.Add(this.label17);
             this.exportLatticeNeo4jGBox.Controls.Add(this.label16);
             this.exportLatticeNeo4jGBox.Controls.Add(this.label15);
@@ -690,6 +692,16 @@
             this.exportLatticeFileGBox.TabStop = false;
             this.exportLatticeFileGBox.Text = "Export lattice file";
             // 
+            // searchNeo4JLatticeBtn
+            // 
+            this.searchNeo4JLatticeBtn.Location = new System.Drawing.Point(359, 72);
+            this.searchNeo4JLatticeBtn.Name = "searchNeo4JLatticeBtn";
+            this.searchNeo4JLatticeBtn.Size = new System.Drawing.Size(169, 23);
+            this.searchNeo4JLatticeBtn.TabIndex = 17;
+            this.searchNeo4JLatticeBtn.Text = "SearchNeo4JLattice";
+            this.searchNeo4JLatticeBtn.UseVisualStyleBackColor = true;
+            this.searchNeo4JLatticeBtn.Click += new System.EventHandler(this.searchNeo4JLatticeBtn_Click);
+            // 
             // FormFCA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -785,6 +797,7 @@
         private System.Windows.Forms.TextBox neo4jPassword;
         private System.Windows.Forms.TextBox neo4jUsername;
         private System.Windows.Forms.GroupBox exportLatticeFileGBox;
+        private System.Windows.Forms.Button searchNeo4JLatticeBtn;
     }
 }
 

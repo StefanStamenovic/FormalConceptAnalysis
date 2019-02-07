@@ -16,8 +16,6 @@ using FCAA.FormalConceptAlgorithms;
 using FCAA.Data;
 using FCAA.DataImport;
 using FCAA.DataImport.ContextFileImporters;
-using SPARQLNET;
-using SPARQLNET.Objects;
 
 namespace FCA
 {
@@ -71,9 +69,11 @@ namespace FCA
         #region Neo4j data
 
         private bool Neo4jDefaultInitialized = false;
-        private string DefaultNeo4jConnectionString = "http://localhost:7474/db/data";
+        private string DefaultNeo4jConnectionString = "http://localhost:11002/db/data";
         private string DefaultNeo4jUsername = "neo4j";
         private string DefaultNeo4jPassword = "root";
+
+        private Neo4jDataProvider Neo4JProvider;
 
         #endregion
 
@@ -301,31 +301,36 @@ namespace FCA
 
         #region Export concept lattice Neo4j
 
-        private void exportLatticeNeo4jBtn_Click(object sender, EventArgs e)
+        private void ConnectNeo4JProvider()
         {
-            LockUIOnNeo4jLatticeExport();
-
             var connectionString = neo4jConnectionString.Text;
             var username = neo4jUsername.Text;
             var password = neo4jPassword.Text;
-            Neo4jDataProvider neo4jProvider = null;
             try
             {
-                neo4jProvider = new Neo4jDataProvider(connectionString, username, password);
+                Neo4JProvider = new Neo4jDataProvider(connectionString, username, password);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Unable to connect Neo4J database.");
                 return;
             }
+        }
+
+        private void exportLatticeNeo4jBtn_Click(object sender, EventArgs e)
+        {
+            LockUIOnNeo4jLatticeExport();
+            if(Neo4JProvider == null)
+                ConnectNeo4JProvider();
             try
             {
-                neo4jProvider.ClearDatabase();
-                neo4jProvider.ImportFCALatticeLikeCSV(this.ConceptLattice);
+                Neo4JProvider.ClearDatabase();
+                Neo4JProvider.ImportFCALatticeLikeCSV(this.ConceptLattice);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Unable to export concept lattice to Neo4J databse.");
+                UnlockUIOnNeo4jLatticeExport();
                 return;
             }
             MessageBox.Show("Concept lattice exported to Neo4J database.");
@@ -352,7 +357,19 @@ namespace FCA
             this.neo4jConnectionString.Enabled = true;
             this.neo4jUsername.Enabled = true;
             this.neo4jPassword.Enabled = true;
+            this.searchNeo4JLatticeBtn.Enabled = true;
             this.exportLatticeFileGBox.Enabled = false;
+        }
+
+        private void searchNeo4JLatticeBtn_Click(object sender, EventArgs e)
+        {
+            SearchNeo4jLattice methodForm = new SearchNeo4jLattice(this.ConceptLattice, this.Neo4JProvider);
+            methodForm.Owner = this;
+            DialogResult result = methodForm.ShowDialog();
+            if (result == DialogResult.Cancel || result == DialogResult.OK)
+            {
+
+            }
         }
 
         #endregion
@@ -407,8 +424,8 @@ namespace FCA
                 var tmp_importer = ContextFileImporterFactory.ProduceImporter(importer);
                 this.importFileFormatCbox.Items.Add(new { Id = (int)importer, Description = tmp_importer.Description });
             }
-            this.importFileFormatCbox.SelectedIndex = 0;
-            this.ContextFileImporter = ContextFileImporterFactory.ProduceImporter(ContextFileImporters.DefaultImporter);
+            this.importFileFormatCbox.SelectedIndex = 1;
+            this.ContextFileImporter = ContextFileImporterFactory.ProduceImporter(ContextFileImporters.Json_id_tags_Importer);
             this.preprocessimportFileAttributesCBox.Checked = false;
         }
 
@@ -487,6 +504,7 @@ namespace FCA
                 this.neo4jPassword.Text = DefaultNeo4jPassword;
                 Neo4jDefaultInitialized = true;
             }
+            this.searchNeo4JLatticeBtn.Enabled = false;
         }
 
         private void ResetExportLatticeFileGroupBox()
@@ -495,27 +513,15 @@ namespace FCA
             this.exportLatticeFileName.Text = String.Empty;
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-            var res = provider.SearchForObjects(textBoxQuery.Text);
-            if(res==null)
-            {
-                richTextBoxResult.Text = "No results!";
-            }
-            else
-            {
-                richTextBoxResult.Text = res.Replace(",", "\n\n");
-            }
+        #endregion
 
-        }
-
-        private void sparqlbutton_Click(object sender, EventArgs e)
+        /*private void sparqlbutton_Click(object sender, EventArgs e)
         {
             //Set the endpoint
             QueryClient queryClient = new QueryClient("http://dbpedia.org/sparql");
 
             var query = "SELECT * WHERE {<http://dbpedia.org/resource/Stealing_Beauty> <http://purl.org/dc/terms/subject> ?categories}";
             Table table = queryClient.Query(query);
-        }
+        }*/
     }
 }

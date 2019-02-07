@@ -33,17 +33,6 @@ namespace Neo4jFCA
             }
         }
 
-        public void CreateNode()
-        {
-            Dictionary<string, object> dictionary = new Dictionary<string, object>();
-            dictionary.Add("name", "test");
-
-            CypherQuery query = new CypherQuery("CREATE (node: Node{ name: {name}})",
-                       dictionary, CypherResultMode.Set);
-
-            ((IRawGraphClient)client).ExecuteCypher(query);
-        }
-
         public void ClearDatabase()
         {
             CypherQuery query = new CypherQuery("MATCH ()-[r]-() DELETE r", null, CypherResultMode.Set);
@@ -68,7 +57,7 @@ namespace Neo4jFCA
                 dictionary.Add("objects", objectsAggregate);
                 dictionary.Add("level", node.Level);
 
-                CypherQuery query = new CypherQuery("CREATE (node: Node{ id: {id}, attributes: {attributes}, objects: {objects}, level: {level}})",
+                CypherQuery query = new CypherQuery("CREATE (node: Concept{ id: {id}, attributes: {attributes}, objects: {objects}, level: {level}})",
                            dictionary, CypherResultMode.Set);
 
                 ((IRawGraphClient)client).ExecuteCypher(query);
@@ -81,7 +70,7 @@ namespace Neo4jFCA
                     var dictionary = new Dictionary<string, object>();
                     dictionary.Add("node_id", node.Id);
                     dictionary.Add("subnode_id", subnode.Id);
-                    var query = new CypherQuery("MATCH (node:Node{id: {node_id}}),(subnode:Node{id: {subnode_id}}) CREATE (node)-[relation:intent]->(subnode)",
+                    var query = new CypherQuery("MATCH (node:Concept{id: {node_id}}),(subnode:Node{id: {subnode_id}}) CREATE (node)-[relation:intent]->(subnode)",
                                dictionary, CypherResultMode.Set);
                     ((IRawGraphClient)client).ExecuteCypher(query);
                 }
@@ -96,8 +85,6 @@ namespace Neo4jFCA
                 }*/
             }
         }
-
-
 
         /// <summary>
         /// Imports the fca lattice like CSV.
@@ -151,7 +138,6 @@ namespace Neo4jFCA
                 .ExecuteWithoutResults();
             edgesfileInfo.Delete();
         }
-
         private string ObjectsCSV(LatticeFormalConcept node)
         {
             var objectsAggregate = String.Empty;
@@ -166,13 +152,14 @@ namespace Neo4jFCA
                 attributesAggregate = node.Attributes.Select(a => a.Name).Aggregate((i, j) => i + " " + j);
             return attributesAggregate;
         }
+
         public string SearchForObjects(string attribute)
         {
             var res = client.Cypher
-                 .Match("(n:Node)")
+                 .Match("(n:Concept)")
                  .Where("n.attributes CONTAINS " + "'" + attribute + "'")
                  .Return(n => n.As<Neo4JNode>().objects)
-                 .OrderBy("n.attrCount")
+                 .OrderByDescending("n.level")
                  .Limit(1)
                  .Results;
             return res.FirstOrDefault();
@@ -182,11 +169,9 @@ namespace Neo4jFCA
         private class Neo4JNode
         {
             public string id { get; set; }
-            public int attrCount { get; set; }
+            public int level { get; set; }
             public string attributes { get; set; }
             public string objects { get; set; }
         }
     }
-
-
 }
