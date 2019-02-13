@@ -16,6 +16,8 @@ using FCAA.FormalConceptAlgorithms;
 using FCAA.Data;
 using FCAA.DataImport;
 using FCAA.DataImport.ContextFileImporters;
+using Attribute = FCAA.Data.Attribute;
+using Object = FCAA.Data.Object;
 
 namespace FCA
 {
@@ -511,6 +513,102 @@ namespace FCA
         {
             this.exportLatticeFolderPath.Text = String.Empty;
             this.exportLatticeFileName.Text = String.Empty;
+        }
+
+        private void testBtn_Click(object sender, EventArgs e)
+        {
+            var context = this.Context;
+
+            var matrix = new bool[context.ObjectsArray.Length][];
+            var attributeIndexes = new Dictionary<Attribute, int>();
+            var objectsIndexes = new Dictionary<Object, int>();
+            for (int i = 0; i < context.AttributesArray.Length; i++)
+                attributeIndexes[context.AttributesArray[i]] = i;
+            for(var i = 0; i < matrix.Length; i++)
+            {
+                matrix[i] = new bool[context.AttributesArray.Length];
+                foreach (var attribute in context.ObjectAttributes[context.ObjectsArray[i]])
+                    matrix[i][attributeIndexes[attribute]] = true;
+            }
+
+            /// sort
+            var vectorPovers = new int[context.ObjectsArray.Length];
+            for(int i = 0; i < context.ObjectsArray.Length; i++)
+            {
+                var max = 0;
+                for (int j = 0; j < context.AttributesArray.Length; j++)
+                    if (matrix[i][j] && j > max)
+                        max = j;
+                vectorPovers[i] = max;
+            }
+            for (int i = 0; i < context.ObjectsArray.Length; i++)
+            {
+                int max = i;
+                for (int j = i; j < context.ObjectsArray.Length; j++)
+                {
+                    if (vectorPovers[max] > vectorPovers[j])
+                    {
+                        max = j;
+                    }
+                }
+                var tmpv = vectorPovers[i];
+                vectorPovers[i] = vectorPovers[max];
+                vectorPovers[max] = tmpv;
+                var tmp = matrix[i];
+                matrix[i] = matrix[max];
+                matrix[max] = tmp;
+            }
+
+            var sw = new StreamWriter("matrix.txt");
+            var sb = new StringBuilder(context.ObjectsArray.Length * context.AttributesArray.Length);
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix[i].Length; j++)
+                    sb.Append((matrix[i][j]) ? "1" : "0");
+                sb.AppendLine();
+            }
+            sw.Write(sb.ToString());
+            sw.Close();
+
+            // reduction
+            var maxheight = 500;
+
+            var matrixses = new List<bool[][]>();
+            bool[][] subMatrix = null;
+            var subwidth = 1;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (i % maxheight == 0)
+                {
+                    var height = ((matrix.Length - i) / maxheight > 0) ? maxheight : (matrix.Length - i) % maxheight;
+                    subMatrix = new bool[height][];
+                    subwidth = vectorPovers[i + height - 1] + 1;
+                }
+                subMatrix[i % maxheight] = new bool[subwidth];
+                for (int j = 0; j < subwidth; j++)
+                {
+                    subMatrix[i % maxheight][j] = matrix[i][j];
+                }
+                if (i % maxheight == 0 && subMatrix != null)
+                {
+                    matrixses.Add(subMatrix);
+                }
+            }
+
+            var sw1 = new StreamWriter("matrixses.txt");
+            var sb1 = new StringBuilder(context.ObjectsArray.Length * context.AttributesArray.Length);
+            foreach(var matrix_ in matrixses)
+            {
+                for (int i = 0; i < matrix_.Length; i++)
+                {
+                    for (int j = 0; j < matrix_[i].Length; j++)
+                        sb1.Append((matrix_[i][j]) ? "1" : "0");
+                    sb1.AppendLine();
+                }
+                sb1.AppendLine();
+            }
+            sw1.Write(sb1.ToString());
+            sw1.Close();
         }
 
         #endregion

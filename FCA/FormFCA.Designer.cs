@@ -36,6 +36,10 @@
             this.inputFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.outputFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.importFileContextGBox = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.importFileFormatCbox = new System.Windows.Forms.ComboBox();
             this.preprocessimportFileAttributesCBox = new System.Windows.Forms.CheckBox();
@@ -90,10 +94,7 @@
             this.exportLatticeFileName = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.exportLatticeFileGBox = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
+            this.testBtn = new System.Windows.Forms.Button();
             this.importFileContextGBox.SuspendLayout();
             this.conceptsAlgorithmGBox.SuspendLayout();
             this.formalContextGBox.SuspendLayout();
@@ -172,6 +173,38 @@
             this.importFileContextGBox.TabIndex = 4;
             this.importFileContextGBox.TabStop = false;
             this.importFileContextGBox.Text = "Import context from file";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(354, 147);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(64, 17);
+            this.label19.TabIndex = 20;
+            this.label19.Text = "Treshold";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(9, 149);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(84, 17);
+            this.label18.TabIndex = 19;
+            this.label18.Text = "NLP service";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(355, 169);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(162, 22);
+            this.textBox2.TabIndex = 18;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 169);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(339, 22);
+            this.textBox1.TabIndex = 17;
             // 
             // label8
             // 
@@ -710,43 +743,22 @@
             this.exportLatticeFileGBox.TabStop = false;
             this.exportLatticeFileGBox.Text = "Export lattice file";
             // 
-            // textBox1
+            // testBtn
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 169);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(339, 22);
-            this.textBox1.TabIndex = 17;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(355, 169);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(162, 22);
-            this.textBox2.TabIndex = 18;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(9, 149);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(84, 17);
-            this.label18.TabIndex = 19;
-            this.label18.Text = "NLP service";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(354, 147);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(64, 17);
-            this.label19.TabIndex = 20;
-            this.label19.Text = "Treshold";
+            this.testBtn.Location = new System.Drawing.Point(16, 477);
+            this.testBtn.Name = "testBtn";
+            this.testBtn.Size = new System.Drawing.Size(75, 23);
+            this.testBtn.TabIndex = 17;
+            this.testBtn.Text = "Test mearge";
+            this.testBtn.UseVisualStyleBackColor = true;
+            this.testBtn.Click += new System.EventHandler(this.testBtn_Click);
             // 
             // FormFCA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1094, 512);
+            this.Controls.Add(this.testBtn);
             this.Controls.Add(this.exportLatticeFileGBox);
             this.Controls.Add(this.exportLatticeNeo4jGBox);
             this.Controls.Add(this.conceptLatticeGBox);
@@ -842,6 +854,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button testBtn;
     }
 }
 
