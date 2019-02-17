@@ -39,7 +39,7 @@ namespace FCAA.DataImport.ContextFileImporters
             var objectPreprocessingAttributes = new Dictionary<Object, HashSet<Attribute>>();
             var attributeObjects = new Dictionary<Attribute, HashSet<Object>>();
 
-            List<Document> documents = await preprocessingManager.PreprocessFileAsync(filePath);
+            List<Document> documents = preprocessingManager.ReadDocumentsFromFile(filePath);
 
             foreach (var document in documents)
             {
@@ -64,7 +64,9 @@ namespace FCAA.DataImport.ContextFileImporters
                 }
             }
  
-            return new FormalContext(objects, attributes, objectPreprocessingAttributes, attributeObjects);
+            var context = new FormalContext(objects, attributes, objectPreprocessingAttributes, attributeObjects);
+            await preprocessingManager.ReduceContext(context);
+            return context;
         }
     }
 }

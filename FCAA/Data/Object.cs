@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FCAA.Data
 {
@@ -17,6 +18,18 @@ namespace FCAA.Data
         {
             Name = name;
             //Id = Guid.NewGuid().ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var @object = obj as Object;
+            return @object != null &&
+                   Name == @object.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return 539060726 + EqualityComparer<string>.Default.GetHashCode(Name);
         }
     }
 }

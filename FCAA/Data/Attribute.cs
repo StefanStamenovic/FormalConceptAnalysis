@@ -15,5 +15,17 @@ namespace FCAA.Data
             Name = name;
             //Id = Guid.NewGuid().ToString(); // Slows down attribute load
         }
+
+        public override bool Equals(object obj)
+        {
+            var attribute = obj as Attribute;
+            return attribute != null &&
+                   Name == attribute.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return 539060726 + EqualityComparer<string>.Default.GetHashCode(Name);
+        }
     }
 }

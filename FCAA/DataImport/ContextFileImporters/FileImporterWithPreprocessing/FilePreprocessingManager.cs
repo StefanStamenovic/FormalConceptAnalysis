@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Attribute = FCAA.Data.Attribute;
+using FCAA.Data;
 
 namespace FCAA.DataImport.ContextFileImporters
 {
@@ -93,6 +95,87 @@ namespace FCAA.DataImport.ContextFileImporters
             sr.Close();
             return (documents, allAttributes);
         }
+
+        public List<Document> ReadDocumentsFromFile(string filePath)
+        {
+            StreamReader sr = new StreamReader(filePath);
+
+
+            string jsonString;
+            List<Document> documents = new List<Document>();
+            while ((jsonString = sr.ReadLine()) != null)
+            {
+                Document document = JsonConvert.DeserializeObject<Document>(jsonString);
+                //Ovde se vrsi preprocesiranje da se od tagova povezanih - naprave recenice zbog NLP-a
+                document.tags = new HashSet<string>(document.tags.Select(s => s.Replace("-", " ")));
+                documents.Add(document);
+            }
+            sr.Close();
+            return documents;
+        }
+
+        public async Task<List<ProcessedAttribute>> CalculateAndOrderPreprocessedAttributesAsync(List<Attribute> attributes)
+        {
+            List<ProcessedAttribute> ProcessedAttributes = new List<ProcessedAttribute>();
+            var jsonStringArray = JsonConvert.SerializeObject(attributes.Select(s => s.Name).ToList());
+            foreach (var att in attributes)
+            {
+                string Json = "{ 'IRI1': '1', 'DESC1' : '" + att.Name + "','IRI2': '2','DESC2' : " + jsonStringArray + " }";
+                using (var client = new HttpClient())
+                {
+                    var response = await client.PostAsync(
+                        "http://160.99.9.216/Description/api/description/comparepair",
+                         new StringContent(Json, Encoding.UTF8, "application/json"));
+
+                    var content = await response.Content.ReadAsStringAsync();
+                    var NLPObject = JsonConvert.DeserializeObject<NLPServiceHttpResponse>(content);
+                    ProcessedAttributes.Add(new ProcessedAttribute(att, NLPObject.Value.Select(x => new MeasuredAttribute(x.Key, x.Value)).ToList(), Treshold));
+                }
+            }
+            return ProcessedAttributes.OrderByDescending(x=>x.NumOfSimilarAttributes).ToList();
+        }
+
+        public async Task ReduceContext(FormalContext context)
+        {
+            var ProcessedAttributes = await CalculateAndOrderPreprocessedAttributesAsync(context.AttributesArray.ToList());
+            foreach (var att in ProcessedAttributes)
+            {
+                ReduceAttributesSetAndAttributeObjects(att, context);
+                ReduceObjectAttributes(att, context);
+            }
+        }
+
+        /// <summary>
+        /// Iz liste AttributesSet i AttributeObject se samo brisu atributi koji ce biti zamenjeni jednim atributom
+        /// </summary>
+        /// <param name="att"></param>
+        /// <param name="context"></param>
+        public void ReduceAttributesSetAndAttributeObjects(ProcessedAttribute att, FormalContext context)
+        {
+            foreach (var item in att.SimilarAttributes)
+            {
+                context.AttributesSet.Remove(item);
+                context.AttributeObjects.Remove(item);
+            }
+        }
+
+        /// <summary>
+        /// Iz dictionary-ja za atribute koje objekti imaju prolazi se kroz atribute, brisu se oni koji ce biti zamenjeni i ubacuje glavni ako vec nije u listi atributa koje objekat poseduje
+        /// </summary>
+        /// <param name="att"></param>
+        /// <param name="context"></param>
+        public void ReduceObjectAttributes(ProcessedAttribute att, FormalContext context)
+        {
+            foreach (var item in att.SimilarAttributes)
+            {
+                foreach (var obj in context.ObjectAttributes)
+                {
+                    obj.Value.Remove(item);
+                    if (!obj.Value.Contains(att.Attribute))
+                        obj.Value.Add(att.Attribute);
+                }
+            }
+        }
     }
 
     public class Document
@@ -116,4 +199,66 @@ namespace FCAA.DataImport.ContextFileImporters
             this.tags = tags;
         }
     }
+
+    public class MeasuredAttribute : Attribute
+    {
+        public float SimilarityValue { get; set; }
+
+        public MeasuredAttribute(string name, float similarityValue) : base(name)
+        {
+            SimilarityValue = similarityValue;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var attribute = obj as MeasuredAttribute;
+            return attribute != null &&
+                   SimilarityValue == attribute.SimilarityValue;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1731922609 + SimilarityValue.GetHashCode();
+        }
+    }
+
+    public class ProcessedAttribute
+    {
+        public double Treshold { get; set; }
+        public Attribute Attribute { get; set; }
+        public List<MeasuredAttribute> MeasuredAttributes { get; set; }
+        public int NumOfSimilarAttributes { get; set; } = 0;
+        public float MedianValue { get; set; } = 0;
+        public List<Attribute> SimilarAttributes { get; set; }
+
+
+        public ProcessedAttribute(Attribute attribute, List<MeasuredAttribute> measuredAttributes, double treshold)
+        {
+            Treshold = treshold;
+            Attribute = attribute;
+            MeasuredAttributes = measuredAttributes;
+            if (MeasuredAttributes.Count != 0)
+            {
+                var similarAttributes = MeasuredAttributes.Where(o => o.SimilarityValue > Treshold);
+                NumOfSimilarAttributes = similarAttributes.Count();
+                MedianValue = similarAttributes.Sum(x => x.SimilarityValue) / MeasuredAttributes.Count;
+                SimilarAttributes = similarAttributes.Select(p => new Attribute(p.Name)).ToList();
+            }
+                
+        }
+    }
+
+    public class JsonItem
+    {
+        public string Key { get; set; }
+        public float Value { get; set; }
+    }
+
+    public class NLPServiceHttpResponse
+    {
+        public int IRI1 { get; set; }
+        public int IRI2 { get; set; }
+        public List<JsonItem> Value { get; set; }
+    }
+
 }
